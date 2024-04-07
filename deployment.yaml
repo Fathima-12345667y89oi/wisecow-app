@@ -31,6 +31,6 @@ spec:
     app: wisecow
   ports:
     - protocol: TCP
-      port: 8080
+      port: 4499
       targetPort: 4499
   type: NodePort
