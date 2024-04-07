@@ -1,0 +1,37 @@
+name: Deploy to Minikube using GitHub Actions
+
+on:
+  push:
+    branches: [main] # Adjust branch name if needed
+  
+jobs:
+  deploy_to_minikube:
+    runs-on: ubuntu-latest
+    name: Build and deploy WiseCow script to Minikube
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      
+    - name: Start Minikube
+      uses: medyagh/setup-minikube@master
+      with:
+        minikube-version: latest # Optionally specify a specific version of Minikube
+
+    - name: Try the cluster
+      run: kubectl get pods -A
+
+    - name: Build Docker image
+      run: |
+        export SHELL=/bin/bash
+        eval $(minikube -p minikube docker-env)
+        docker build -f ./Dockerfile -t fathima979/wiseapp:cowsay .
+        echo "Verifying images:"
+        docker images
+
+    - name: Deploy to Minikube
+      run: kubectl apply -f k8s-wisecow.yaml
+
+    - name: Test service URLs
+      run: |
+        echo "Service URLs:"
+        minikube service list
