@@ -36,7 +36,4 @@ jobs:
         echo "Service URLs:"
         minikube service list
 
-    - name: Get Service URL
-      run: |
-        SERVICE_URL=$(minikube service wisecow-service --url)
-        echo "Service URL: $SERVICE_URL"
+    
