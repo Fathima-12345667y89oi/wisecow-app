@@ -13,10 +13,10 @@ jobs:
       uses: actions/checkout@v2
       
     - name: Start Minikube
-      run: |
-        minikube start
-        minikube tunnel --cleanup
-        
+      uses: medyagh/setup-minikube@master
+      with:
+        minikube-version: latest # Optionally specify a specific version of Minikube
+
     - name: Try the cluster
       run: kubectl get pods -A
 
@@ -35,14 +35,7 @@ jobs:
       run: |
         kubectl wait --for=condition=Ready pod --timeout=300s -l app=wisecow
 
-    - name: Start Ngrok tunnel
-      run: |
-        wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-        unzip ngrok-stable-linux-amd64.zip
-        ./ngrok authtoken 2enLgVu3PvtHn028G7hntteDg97_6ixUmWaZHmbHDF2uCSrSi
-        ./ngrok http 80
-
     - name: Test service URLs
       run: |
         minikube service list
-        minikube service wisecow-service --url
+        minikube service wisecow-service
