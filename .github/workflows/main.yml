@@ -31,8 +31,7 @@ jobs:
     - name: Deploy to Minikube
       run: |
         kubectl apply -f deployment.yaml
-        kubectl apply -f service.yaml # Add this line to apply service definition
-
+    
     - name: Wait for pods to be ready
       run: |
         kubectl wait --for=condition=Ready pod --timeout=300s -l app=wisecow
