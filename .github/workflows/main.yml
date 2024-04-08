@@ -31,11 +31,6 @@ jobs:
     - name: Deploy to Minikube
       run: |
         kubectl apply -f deployment.yaml
-        kubectl expose deployment wisecow-deployment --type=LoadBalancer --port=8080
-
-    - name: Wait for pods to be ready
-      run: |
-        kubectl wait --for=condition=Ready pod --timeout=300s -l app=wisecow
 
     - name: Test service URLs
       run: |
