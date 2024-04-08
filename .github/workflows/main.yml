@@ -13,10 +13,8 @@ jobs:
       uses: actions/checkout@v2
       
     - name: Start Minikube
-      uses: medyagh/setup-minikube@master
-      with:
-        minikube-version: latest # Optionally specify a specific version of Minikube
-
+      run: minikube start --vm-driver=hyperkit
+      
     - name: Try the cluster
       run: kubectl get pods -A
 
@@ -31,11 +29,11 @@ jobs:
     - name: Deploy to Minikube
       run: kubectl apply -f deployment.yaml
 
-    - name: Start tunnel and expose service
-      run: minikube service wisecow-service --url
-      id: service_url
+    - name: Wait for pods to be ready
+      run: |
+        kubectl wait --for=condition=Ready pod --timeout=300s -l app=wisecow
 
     - name: Test service URLs
       run: |
-        echo "Service URL: ${{ steps.service_url.outputs.stdout }}"
-        curl -I ${{ steps.service_url.outputs.stdout }}
+        minikube service list
+        minikube service wisecow-service --url
