@@ -29,9 +29,10 @@ metadata:
 spec:
   selector:
     app: wisecow
+  type: LoadBalancer
   ports:
     - protocol: TCP
       port: 80
       targetPort: 4499
        nodePort: 31000
-  type: LoadBalancer
+  
