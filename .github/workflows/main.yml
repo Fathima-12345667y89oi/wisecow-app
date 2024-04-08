@@ -29,7 +29,9 @@ jobs:
         docker images
 
     - name: Deploy to Minikube
-      run: kubectl apply -f deployment.yaml
+      run: |
+        kubectl apply -f deployment.yaml
+        kubectl expose deployment wisecow-deployment --type=LoadBalancer --port=8080
 
     - name: Wait for pods to be ready
       run: |
